@@ -17,23 +17,26 @@
     "directories": {
       "output": "dist"
     },
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.utilities",
-      "identity": null
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
-    },
     "files": [
       "**/*",
       "!dist/*",
       "!node_modules/*",
       "node_modules/express/**/*"
-    ]
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities",
+      "identity": null,
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png"
+    }
   },
   "repository": {
     "type": "git",
