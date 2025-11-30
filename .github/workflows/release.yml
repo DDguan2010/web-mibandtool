@@ -30,9 +30,11 @@ jobs:
         curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
         sudo apt-get install -y nodejs
 
-    - name: Clone repository
+    - name: Checkout repository
       run: |
-        git clone https://github.com/${{ github.repository }}.git .
+        git init
+        git remote add origin https://github.com/${{ github.repository }}.git
+        git fetch origin ${{ github.ref_name }}
         git checkout ${{ github.ref_name }}
 
     - name: Install dependencies
@@ -67,9 +69,11 @@ jobs:
         Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.19.0/node-v18.19.0-x64.msi" -OutFile "node.msi"
         Start-Process msiexec.exe -ArgumentList "/i node.msi /quiet" -Wait
 
-    - name: Clone repository
+    - name: Checkout repository
       run: |
-        git clone https://github.com/${{ github.repository }}.git .
+        git init
+        git remote add origin https://github.com/${{ github.repository }}.git
+        git fetch origin ${{ github.ref_name }}
         git checkout ${{ github.ref_name }}
 
     - name: Install dependencies
@@ -106,9 +110,11 @@ jobs:
         curl -fsSL https://nodejs.org/dist/v18.19.0/node-v18.19.0.pkg -o node.pkg
         sudo installer -pkg node.pkg -target /
 
-    - name: Clone repository
+    - name: Checkout repository
       run: |
-        git clone https://github.com/${{ github.repository }}.git .
+        git init
+        git remote add origin https://github.com/${{ github.repository }}.git
+        git fetch origin ${{ github.ref_name }}
         git checkout ${{ github.ref_name }}
 
     - name: Install dependencies
