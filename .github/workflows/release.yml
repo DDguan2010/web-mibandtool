@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install
+      run: npm ci
+
+    - name: Get version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION="${{ github.ref_name }}"
+        fi
+
+    - name: Build web app
+      run: |
+        mkdir -p dist
+        cp -r public/* dist/
+        cp index.html dist/
+        cp styles.css dist/
+        cp app.js dist/
+        cp mibandtoolapi.md dist/
+        cp devices.json dist/
+        cp LICENSE dist/
+
+    - name: Create archive
+      run: |
+        cd dist
+        zip -r MiBandTool-$VERSION.zip .
+
+    -name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/MiBandTool-$VERSION.zip
+        draft: false
+        name: MiBandTool $VERSION
+        body: |
+          MiBandTool $VERSION
+
+    - name: Update version
+      run: |
+        npm version $VERSION --no-git-tag-version
+        git add package.json
+        git commit -m "v$VERSION"
+        git tag v$VERSION
+        git push origin main --follow-tags
+
+    - name: Cleanup
+      run: |
+        rm -rf dist
+        rm -f MiBandTool-$VERSION.zip
+
+    - name: Clean old releases
+      run: |
+        gh release delete --tag "v*" --yes || true
+        git tag -d "v*" || true
+        git push origin --tags --force
