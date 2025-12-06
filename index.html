@@ -127,7 +127,7 @@
                         <span class="material-icons upload-icon">cloud_upload</span>
                         <h3>拖拽表盘文件到这里</h3>
                         <p id="uploadAreaText">或点击选择文件</p>
-                        <input type="file" id="binFileInput" accept=".bin" hidden>
+                        <input type="file" id="binFileInput" accept=".bin,.rpk" hidden>
                         <button class="button-filled" id="selectFileBtn"
                             onclick="document.getElementById('binFileInput').click()">
                             选择文件
@@ -188,6 +188,19 @@
                             </select>
                         </div>
 
+                        <div class="form-field">
+                            <label for="mitantype">米坛帖子</label>
+                            <select id="mitantype" required>
+                                <option value="t">讨论帖</option>
+                                <option value="r">资源帖</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="mitantid">米坛帖子id</label>
+                            <input type="text" id="mitantid" required>
+                        </div>
+
                         <div class="form-field checkbox-field">
                             <label>
                                 <input type="checkbox" id="staticPng">
@@ -238,7 +251,7 @@
                 <h2 class="page-title">关于</h2>
                 <div class="about-content">
                     <h3>小米手环表盘自定义工具</h3>
-                    <p>版本: 1.0.0</p>
+                    <p>版本: 1.0.1</p>
                     <p>这是一个基于 MiBandTool API 的表盘自定义工具网页版。</p>
                     <p>支持浏览、下载、上传和管理表盘资源。</p>
                 </div>
@@ -266,11 +279,11 @@
                 
                 <div class="login-options">
                     <button class="button-filled" id="mitanLoginBtn" style="width: 100%; margin-bottom: 12px;">
-                        <span>🌐 打开米坛登录</span>
+                        <span>打开米坛登录</span>
                     </button>
                     
                     <button class="button-outlined" id="copyLoginLinkBtn" style="width: 100%; margin-bottom: 16px;">
-                        <span>📋 复制登录链接</span>
+                        <span>复制登录链接</span>
                     </button>
                 </div>
 
@@ -288,7 +301,7 @@
                 </button>
                 
                 <div id="copyStatus" style="margin-top: 12px; text-align: center; display: none;">
-                    <span style="color: var(--md-sys-color-primary);">✅ 登录链接已复制到剪贴板</span>
+                    <span style="color: var(--md-sys-color-primary);">登录链接已复制到剪贴板</span>
                 </div>
             </div>
         </div>

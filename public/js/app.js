@@ -907,6 +907,10 @@ async function showWatchfaceDetail(watchface) {
                 <div class="detail-info-value">${watchface.type}</div>
             </div>
             <div class="detail-info-row">
+                <div class="detail-info-label">米坛帖子</div>
+                <div class="detail-info-value">${watchface.mitantid===""?"无":(watchface.mitantype==="r"?"https://www.bandbbs.cn/resources/":"https://www.bandbbs.cn/threads/")+watchface.mitantid}</div>
+            </div>
+            <div class="detail-info-row">
                 <div class="detail-info-label">描述</div>
                 <div class="detail-info-value">${watchface.desc || '暂无描述'}</div>
             </div>
@@ -1148,11 +1152,11 @@ function initializeUploadForm() {
         uploadArea.classList.remove('drag-over');
 
         const files = e.dataTransfer.files;
-        if (files.length > 0 && files[0].name.endsWith('.bin')) {
+        if (files.length > 0 && (files[0].name.endsWith('.bin')||files[0].name.endsWith('.rpk'))) {
             binFileInput.files = files;
             updateUploadAreaText(files[0].name);
         } else {
-            showSnackbar('请选择 .bin 文件');
+            showSnackbar('请选择 .bin或.rpk 文件');
         }
     });
 
@@ -1234,6 +1238,8 @@ async function submitUpload() {
     const type = document.getElementById('watchfaceType').value;
     const staticPng = document.getElementById('staticPng').checked;
     const updateId = document.getElementById('updateId')?.value || '';
+    const mitantype = document.getElementById('mitantype')?.value;
+    const mitantid = document.getElementById('mitantid')?.value || '';
 
     if (!name || !type) {
         showSnackbar('请填写必填字段');
@@ -1260,10 +1266,10 @@ async function submitUpload() {
         const previewImgAod2 = await uploadPreviewImage('previewImgAod2');
         const previewImgAod3 = await uploadPreviewImage('previewImgAod3');
 
-        if (!previewImg) {
+        /*if (!previewImg) {
             showSnackbar('请上传主预览图');
             return;
-        }
+        }*/
 
         // Upload watchface
         const formData = new FormData();
@@ -1277,11 +1283,12 @@ async function submitUpload() {
         formData.append('desc', desc);
         formData.append('type', type);
         formData.append('staticPng', staticPng);
-        formData.append('previewImg', previewImg);
+        
         formData.append('updateId', updateId);
-        formData.append('mitantid', appState.user.openid);
-        formData.append('mitantype', 'r');
+        formData.append('mitantid', mitantid);
+        formData.append('mitantype', mitantype);
 
+        if (previewImgAod) formData.append('previewImg', previewImg);
         if (previewImgAod) formData.append('previewImgAod', previewImgAod);
         if (previewImgAod2) formData.append('previewImgAod2', previewImgAod2);
         if (previewImgAod3) formData.append('previewImgAod3', previewImgAod3);
@@ -1629,6 +1636,8 @@ async function editWatchface(watchfaceId) {
                     document.getElementById('watchfaceName').value = watchface.name;
                     document.getElementById('watchfaceDesc').value = watchface.desc || '';
                     document.getElementById('watchfaceType').value = watchface.type;
+                    document.getElementById('mitantype').value = watchface.mitantype;
+                    document.getElementById('mitantid').value = watchface.mitantid;
                     document.getElementById('staticPng').checked = watchface.previewAod ? true : false;
 
                     // Add update ID hidden field
